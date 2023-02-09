@@ -14,11 +14,10 @@ import java.util.*;
 //156 142
 
 public class Main {
-    static int eventType;
     public static void main(String[] args) throws IOException {
         try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             int n = Integer.parseInt(br.readLine());
-            Map<Integer, Map<Integer, Integer>> eventsById = new TreeMap<>();
+            Map<Integer, Map<Integer, String>> eventsById = new TreeMap<>();
 
             for (int i = 0; i < n; i++) {
                 String[] data = br.readLine().split(" ");
@@ -28,36 +27,29 @@ public class Main {
                 int rId = Integer.parseInt(data[3]);
                 String event = data[4];
 
-                if(event.equals("A")) {
-                    eventType = 0;
-                } else if (event.equals("C") || event.equals("S")) {
-                    eventType = 1;
-                } else if (event.equals("B")) {
+                if (event.equals("B"))
                     continue;
-                }
+
                 hour = day * 24 + hour;
                 minute = hour * 60 + minute;
                 if(!eventsById.containsKey(rId)) {
                     eventsById.put(rId, new TreeMap<>());
                 }
-                eventsById.get(rId).put(minute, eventType);
+                eventsById.get(rId).put(minute, event);
             }
-            System.out.println();
-            System.out.println(eventsById);
+
             for (var el : eventsById.values()){
                 int ans = 0;
                 int prevTime = 0;
                 for(var elem : el.entrySet()) {
-                    if(elem.getValue() == 0) {
+                    if(elem.getValue().equals("A")) {
                         prevTime = elem.getKey();
-                    } else if (elem.getValue() == 1) {
+                    } else if (elem.getValue().equals("C") || elem.getValue().equals("S")) {
                         ans += elem.getKey() - prevTime;
                     }
                 }
                 System.out.print(ans + " ");
             }
         }
-
-
     }
 }
